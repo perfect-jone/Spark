@@ -3,7 +3,7 @@ package com.atjone.bigdata.spark
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
-object Spar04_mapPartitionsWithIndex {
+object Spark04_mapPartitionsWithIndex {
   def main(args: Array[String]): Unit = {
 
     //创建SparkContext对象
