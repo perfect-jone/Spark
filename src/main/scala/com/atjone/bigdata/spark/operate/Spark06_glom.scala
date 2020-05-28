@@ -10,11 +10,14 @@ object Spark06_glom {
     val conf: SparkConf = new SparkConf().setMaster("local[*]").setAppName("glomRDD")
     val sc: SparkContext = new SparkContext(conf)
 
-    //从内存中创建对象,设置5个分区
-    val listRDD: RDD[Int] = sc.makeRDD(Array(1, 2, 3, 4, 5, 6, 7, 8), 3)
+    //从内存中创建对象,设置3个分区
+    val listRDD: RDD[Int] = sc.makeRDD(Array(6, 3, 8, 7, 5, 1, 4, 2), 3)
 
     //glom算子:将一个分区的数据放到一个数组中
     val glomRDD: RDD[Array[Int]] = listRDD.glom()
     glomRDD.collect().foreach(arr =>println(arr.mkString(",")))
+
+    //取出每个分区的最大值
+    glomRDD.collect().foreach(arr =>println(arr.mkString(",").max))
   }
 }
