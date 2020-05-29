@@ -7,7 +7,7 @@ object Spark19_partitionBy {
   def main(args: Array[String]): Unit = {
 
     //创建SparkContext对象
-    val conf: SparkConf = new SparkConf().setMaster("local[*]").setAppName("partitionByRDD")
+    val conf: SparkConf = new SparkConf().setMaster("local[*]").setAppName("")
     val sc: SparkContext = new SparkContext(conf)
 
     val listRDD: RDD[(Int, String)] = sc.makeRDD(List((1, "a"), (2, "b"), (3, "c"), (4, "d"), (5, "e"), (6, "f")))
