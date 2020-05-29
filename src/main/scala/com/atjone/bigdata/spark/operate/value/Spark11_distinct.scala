@@ -1,9 +1,9 @@
-package com.atjone.bigdata.spark.operate
+package com.atjone.bigdata.spark.operate.value
 
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
-object Spark10_distinct {
+object Spark11_distinct {
   def main(args: Array[String]): Unit = {
 
     //创建SparkContext对象
