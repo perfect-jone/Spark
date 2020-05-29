@@ -15,7 +15,7 @@ object Spark20_groupByKey {
     //"one" ==> ("one",1)
     val kvRDD: RDD[(String, Int)] = listRDD.map((_, 1))
 
-    //groupByKey算子(k-v):按key分组,会生成ShuffleRDD
+    //groupByKey算子(k-v):按key分组,直接进行shuffle
     val groupByKeyRDD: RDD[(String, Iterable[Int])] = kvRDD.groupByKey()
 
     //求和

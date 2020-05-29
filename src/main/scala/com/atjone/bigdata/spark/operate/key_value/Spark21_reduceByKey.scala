@@ -15,7 +15,7 @@ object Spark21_reduceByKey {
     //"one" ==> ("one",1)
     val kvRDD: RDD[(String, Int)] = listRDD.map((_, 1))
 
-    //reduceByKey算子(k-v):将相同key的值聚合到一起
+    //reduceByKey算子(k-v):按照key进行聚合，在shuffle之前有combine（预聚合）操作，返回结果是RDD[k,v]
     //(x,y)=>(x+y)
     val reduceByKeyRDD: RDD[(String, Int)] = kvRDD.reduceByKey(_ + _)
 
