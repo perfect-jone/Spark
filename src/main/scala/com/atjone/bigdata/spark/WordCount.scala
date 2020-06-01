@@ -11,6 +11,7 @@ object WordCount {
 
     //创建Spark上下文对象
     val sc: SparkContext = new SparkContext(config)
+
     //本地文件系统"file:///e:/word.txt"
     //HDFS系统"hdfs://hadoop101:9000/input"
     val res = sc.textFile("file:///e:/word.txt").flatMap(_.split(" ")).map((_, 1)).reduceByKey(_ + _).collect()
