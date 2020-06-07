@@ -45,7 +45,6 @@ object SparkSQL03_Transform {
     //释放资源
     spark.stop()
 
-
   }
 }
 
