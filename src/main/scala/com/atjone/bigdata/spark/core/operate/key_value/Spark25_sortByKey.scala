@@ -18,7 +18,6 @@ object Spark25_sortByKey {
       (_, 1),
       (comb: (Int, Int), v) => (comb._1 + v, comb._2 + 1),
       (comb1: (Int, Int), comb2: (Int, Int)) => (comb1._1 + comb2._1, comb1._2 + comb2._2))
-    sumRDD
 
     rdd2.collect().foreach(println)
 

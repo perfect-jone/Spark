@@ -54,7 +54,7 @@ object Spark26_mysql {
             statement.executeUpdate()
             statement.close()
           } catch {
-            case e => e.printStackTrace()
+            case e:Throwable => e.printStackTrace()
           }
         }
       }

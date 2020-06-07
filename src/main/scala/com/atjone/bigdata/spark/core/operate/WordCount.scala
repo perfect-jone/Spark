@@ -1,4 +1,4 @@
-package com.atjone.bigdata.spark
+package com.atjone.bigdata.spark.core.operate
 
 import org.apache.spark.{SparkConf, SparkContext}
 

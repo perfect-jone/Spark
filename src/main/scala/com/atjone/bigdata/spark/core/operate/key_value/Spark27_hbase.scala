@@ -18,7 +18,7 @@ object Spark27_hbase {
     val sparkConf: SparkConf = new SparkConf().setMaster("local[*]").setAppName("")
     val sc: SparkContext = new SparkContext(sparkConf)
 
-/*    //构建HBase配置信息
+    //构建HBase配置信息
     val conf: Configuration = HBaseConfiguration.create()
     conf.set("hbase.zookeeper.quorum", "hadoop101,hadoop102,hadoop103")
     conf.set(TableInputFormat.INPUT_TABLE, "student")
@@ -29,7 +29,10 @@ object Spark27_hbase {
       * @param kClass Class of the keys
       * @param vClass Class of the values
       */
-    val hbaseRDD: RDD[(ImmutableBytesWritable, Result)] = sc.newAPIHadoopRDD(conf,
+
+      //SparkContext对象会有一个专门的方法来访问其他跟Hadoop相关的框架，比如HBase，Hive
+    val hbaseRDD: RDD[(ImmutableBytesWritable, Result)] = sc.newAPIHadoopRDD(
+      conf,
       classOf[TableInputFormat],
       classOf[ImmutableBytesWritable],
       classOf[Result])
@@ -45,11 +48,10 @@ object Spark27_hbase {
           println("rowkey:" + rowkey + "\tfamily:qualifier " + family + ":" + qualifier + "\tvalue:" + value)
         }
       }
-    }*/
+    }
 
-    val conf: Configuration = HBaseConfiguration.create()
-    conf.set("hbase.zookeeper.quorum", "hadoop101,hadoop102,hadoop103")
-    val dataRDD: RDD[(String, String)] = sc.makeRDD(List(("1006","pating"),("1007","jone"),("1008","xiaopangpan")))
+
+    val dataRDD: RDD[(String, String)] = sc.makeRDD(List(("1006", "pating"), ("1007", "jone"), ("1008", "xiaopangpan")))
     val putRDD: RDD[(ImmutableBytesWritable, Put)] = dataRDD.map {
       case (rowkey, value) => {
         val put = new Put(Bytes.toBytes(rowkey))
@@ -59,11 +61,11 @@ object Spark27_hbase {
     }
     val jobConf = new JobConf(conf)
     jobConf.setOutputFormat(classOf[TableOutputFormat])
-    jobConf.set(TableOutputFormat.OUTPUT_TABLE,"student")
+    jobConf.set(TableOutputFormat.OUTPUT_TABLE, "student")
     putRDD.saveAsHadoopDataset(jobConf)
 
     //释放资源
-      sc.stop()
+    sc.stop()
   }
 }
 
