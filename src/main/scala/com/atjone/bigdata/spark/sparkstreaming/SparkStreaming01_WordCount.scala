@@ -11,7 +11,7 @@ object SparkStreaming01_WordCount {
     val sparkConf: SparkConf = new SparkConf().setMaster("local[*]").setAppName("")
 
     // 实时数据分析环境对象：配置信息，采集周期
-    val streamingContext = new StreamingContext(sparkConf, Seconds(5))
+    val streamingContext:StreamingContext = new StreamingContext(sparkConf, Seconds(5))
 
     // 从指定的端口中采集数据
     val socketLineDStream: ReceiverInputDStream[String] = streamingContext.socketTextStream("hadoop101", 9999)
