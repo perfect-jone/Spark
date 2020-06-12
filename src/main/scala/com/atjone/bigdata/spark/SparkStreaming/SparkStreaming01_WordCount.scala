@@ -3,7 +3,7 @@ package com.atjone.bigdata.spark.SparkStreaming
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.dstream.{DStream, ReceiverInputDStream}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
-
+// 从TCP socket输入源、指定的端口中采集数据 socketTextStream
 object SparkStreaming01_WordCount {
   def main(args: Array[String]): Unit = {
 
@@ -13,7 +13,7 @@ object SparkStreaming01_WordCount {
     // 实时数据分析环境对象：配置信息，采集周期
     val streamingContext:StreamingContext = new StreamingContext(sparkConf, Seconds(5))
 
-    // 从指定的端口中采集数据
+    // 从TCP socket输入源、指定的端口中采集数据
     val socketLineDStream: ReceiverInputDStream[String] = streamingContext.socketTextStream("hadoop101", 9999)
 
     // 将采集的数据进行扁平化
@@ -33,7 +33,7 @@ object SparkStreaming01_WordCount {
     // 启动采集器
     streamingContext.start()
 
-    // Driver等待采集器的执行
+    // Driver等待采集器的执行，采集器停，Driver才可以停
     streamingContext.awaitTermination()
   }
 }

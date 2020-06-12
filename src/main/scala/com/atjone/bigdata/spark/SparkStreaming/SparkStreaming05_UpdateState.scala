@@ -1,16 +1,13 @@
 package com.atjone.bigdata.spark.SparkStreaming
 
-import java.io.{BufferedReader, InputStreamReader}
-import java.net.Socket
 import org.apache.spark.SparkConf
 import org.apache.spark.storage.StorageLevel
 import org.apache.spark.streaming.dstream.{DStream, ReceiverInputDStream}
 import org.apache.spark.streaming.kafka.KafkaUtils
-import org.apache.spark.streaming.receiver.Receiver
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
-// 从Kafka中采集数据 KafkaUtils.createStream
-object SparkStreaming04_KafkaSource {
+// 无状态转换:采集器每个周期采集一次数据每个周期间是独立的；有状态转换：保留上个周期数据和当前周期数据进行更新
+object SparkStreaming05_UpdateState {
   def main(args: Array[String]): Unit = {
 
     // Spark配置信息
@@ -19,7 +16,10 @@ object SparkStreaming04_KafkaSource {
     // 实时数据分析环境对象：配置信息，采集周期
     val streamingContext: StreamingContext = new StreamingContext(sparkConf, Seconds(5))
 
-    // 从Kafka中采集数据,ReceiverInputDStream[(String, String)],第一个String是Key,第二个String是Value
+    //设置有状态转换检查点保存目录
+    streamingContext.sparkContext.setCheckpointDir("out")
+
+    // 从Kafka中采集数据,ReceiverInputDStream[(String, String)],第一个String是Key,第二个String是Vavalu
     val kafkaDStream: ReceiverInputDStream[(String, String)] = KafkaUtils.createStream(
       streamingContext,
       "hadoop101:2181,hadoop102:2181,hadoop103:2181",
@@ -35,10 +35,19 @@ object SparkStreaming04_KafkaSource {
     val mapDStream: DStream[(String, Int)] = wordDStream.map((_, 1))
 
     // 将转换后的数据按照相同的key进行聚合
-    val wordCountDStream: DStream[(String, Int)] = mapDStream.reduceByKey(_ + _)
+    //val wordCountDStream: DStream[(String, Int)] = mapDStream.reduceByKey(_ + _)
+
+    //有状态转换
+    val statDStream: DStream[(String, Int)] = mapDStream.updateStateByKey {
+      case (seq, buffer) => {
+        val sum = buffer.getOrElse(0) + seq.sum
+        // (Hello ,1)
+        Option(sum)
+      }
+    }
 
     // 将结果打印出来
-    wordCountDStream.print()
+    statDStream.print()
 
     // 不能停止采集程序
 

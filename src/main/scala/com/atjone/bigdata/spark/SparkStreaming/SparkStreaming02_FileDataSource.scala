@@ -3,7 +3,7 @@ package com.atjone.bigdata.spark.SparkStreaming
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.dstream.{DStream, ReceiverInputDStream}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
-
+// 从指定的文件夹中采集数据 textFileStream
 object SparkStreaming02_FileDataSource {
   def main(args: Array[String]): Unit = {
 
@@ -33,7 +33,7 @@ object SparkStreaming02_FileDataSource {
     // 启动采集器
     streamingContext.start()
 
-    // Driver等待采集器的执行
+    // Driver等待采集器的执行，采集器停，Driver才可以停
     streamingContext.awaitTermination()
   }
 }

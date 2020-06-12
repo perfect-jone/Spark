@@ -8,7 +8,7 @@ import org.apache.spark.streaming.dstream.DStream
 import org.apache.spark.streaming.receiver.Receiver
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
-
+// 从指定的文件夹中采集数据,自定义采集器  receiverStream
 object SparkStreaming03_MyReceive {
   def main(args: Array[String]): Unit = {
 
@@ -38,7 +38,7 @@ object SparkStreaming03_MyReceive {
     // 启动采集器
     streamingContext.start()
 
-    // Driver等待采集器的执行
+    // Driver等待采集器的执行，采集器停，Driver才可以停
     streamingContext.awaitTermination()
   }
 }
